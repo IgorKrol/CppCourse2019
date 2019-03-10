@@ -29,7 +29,8 @@ ec[0]=0
 st[0]="PASS"
 
 #run valgrind
-valgrind ./$program $args > $trash 2>&1
+# valgrind ./$program $args > $trash 2>&1
+valgrind --leak-check=full --error-exitcode=1 ./$program $args > $trash 2>&1
 valout=$?
 
 if [ $valout -eq 0 ] ; then
@@ -38,13 +39,14 @@ st[1]="PASS"
 fi
 
 #run helgrind
-valgrind --tool=helgrind ./$program $args > $trash 2>&1
+valgrind --tool=helgrind --error-exitcode=1 ./$program $args > $trash 2>&1
 helout=$?
 
 if [ $helout -eq 0 ] ; then
 ec[2]=0
 st[2]="PASS"
 fi
+
 
 #give status and exitcode
 echo "${st[0]}		${st[1]}		${st[2]}"
